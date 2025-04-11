@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Graphe D3</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    svg { width: 100vw; height: 100vh; display: block; background: #f5f7fa; }
+    .node circle { fill: #007acc; stroke: #fff; stroke-width: 1.5px; }
+    .node text { fill: #333; font-size: 12px; }
+    .link { stroke: #999; stroke-opacity: 0.6; }
+    .highlighted { stroke: orange !important; stroke-width: 3px !important; }
+  </style>
+</head>
+<body>
+  <svg></svg>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+    const graph = {
+      nodes: [
+        { id: "Maxime Faye", group: "profil" },
+        { id: "Cytiva", group: "exp" },
+        { id: "C#", group: "tech" },
+        { id: ".NET", group: "tech" },
+        { id: "Entity Framework", group: "tech" },
+        { id: "Azure DevOps", group: "tech" },
+        { id: "Innovation & Solution Manager", group: "exp" },
+        { id: "Leadership", group: "skill" },
+        { id: "Fullstack", group: "skill" },
+        { id: "CBTW", group: "exp" },
+      ],
+      links: [
+        { source: "Maxime Faye", target: "Innovation & Solution Manager" },
+        { source: "Innovation & Solution Manager", target: "CBTW" },
+        { source: "Maxime Faye", target: "Cytiva" },
+        { source: "Cytiva", target: "C#" },
+        { source: "Cytiva", target: ".NET" },
+        { source: "Cytiva", target: "Entity Framework" },
+        { source: "Cytiva", target: "Azure DevOps" },
+        { source: "Maxime Faye", target: "Leadership" },
+        { source: "Maxime Faye", target: "Fullstack" }
+      ]
+    };
+
+    const svg = d3.select("svg"),
+      width = window.innerWidth,
+      height = window.innerHeight;
+
+    const simulation = d3.forceSimulation(graph.nodes)
+      .force("link", d3.forceLink(graph.links).id(d => d.id).distance(120))
+      .force("charge", d3.forceManyBody().strength(-500))
+      .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const link = svg.append("g")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
+      .selectAll("line")
+      .data(graph.links)
+      .join("line")
+      .attr("class", "link")
+      .attr("stroke-width", 1.5);
+
+    const node = svg.append("g")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
+      .selectAll("g")
+      .data(graph.nodes)
+      .join("g")
+      .attr("class", "node")
+      .call(drag(simulation));
+
+    node.append("circle")
+      .attr("r", 20)
+      .on("click", (event, d) => highlightConnections(d.id));
+
+    node.append("text")
+      .text(d => d.id)
+      .attr("x", 25)
+      .attr("y", 5);
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function drag(simulation) {
+      return d3.drag()
+        .on("start", event => {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        })
+        .on("drag", event => {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        })
+        .on("end", event => {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
+        });
+    }
+
+    function highlightConnections(id) {
+      link.classed("highlighted", d => d.source.id === id || d.target.id === id);
+    }
+  </script>
+</body>
+</html>
