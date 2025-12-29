@@ -1,0 +1,14 @@
+# Robots.txt pour cv.maxoumask.com
+# Autorise tous les robots à indexer le site
+
+User-agent: *
+Allow: /
+
+# Fichiers à ne pas indexer (optionnel)
+Disallow: /generate-docx.js
+
+# Sitemap
+Sitemap: https://cv.maxoumask.com/sitemap.xml
+
+# Crawl-delay (optionnel, aide à éviter la surcharge du serveur)
+# Crawl-delay: 1
