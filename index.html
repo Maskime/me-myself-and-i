@@ -1,196 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E💼%3C/text%3E%3C/svg%3E">
-<meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interactive resume visualization</title>
-  <style>
-    :root {
-      --bg-light: #fdfdfd;
-      --text-light: #333;
-      --node-light: #007acc;
-      --link-light: #bbb;
-
-      --bg-dark: #1e1e1e;
-      --text-dark: #eee;
-      --node-dark: #61dafb;
-      --link-dark: #444;
-    }
-
-    body {
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    body[data-theme='light'] {
-      background-color: var(--bg-light);
-      color: var(--text-light);
-    }
-    body[data-theme='dark'] {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    svg { width: 100vw; height: 100vh; display: block; }
-
-    .link {
-      stroke: var(--link-light);
-      stroke-opacity: 0.6;
-      transition: stroke 0.4s ease;
-    }
-    body[data-theme='dark'] .link {
-      stroke: var(--link-dark);
-    }
-
-    .node circle {
-      fill: var(--node-light);
-      stroke: #fff;
-      stroke-width: 1.5px;
-      transition: fill 0.4s ease, stroke 0.4s ease;
-    }
-    body[data-theme='dark'] .node circle {
-      fill: var(--node-dark);
-      stroke: #ccc;
-    }
-
-    .node text {
-      fill: var(--text-light);
-      font-size: 12px;
-      transition: fill 0.4s ease;
-    }
-    body[data-theme='dark'] .node text {
-      fill: var(--text-dark);
-    }
-
-    .highlighted {
-      stroke: orange !important;
-      stroke-width: 3px !important;
-    }
-
-    #theme-toggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-      padding: 8px 12px;
-      font-size: 14px;
-      background: var(--bg-light);
-      color: var(--text-light);
-      border: 1px solid var(--text-light);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
-    }
-    body[data-theme='dark'] #theme-toggle {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-      border: 1px solid var(--text-dark);
-    }
-  </style>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxime Faye - Tech Lead / Engineering Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body data-theme="light">
-  <button id="theme-toggle">Dark Mode</button>
-  <svg></svg>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script>
-    const graph = {
-      nodes: [
-        { id: "Maxime Faye", group: "profil" },
-        { id: "Cytiva", group: "exp" },
-        { id: "C#", group: "tech" },
-        { id: ".NET", group: "tech" },
-        { id: "Entity Framework", group: "tech" },
-        { id: "Azure DevOps", group: "tech" },
-        { id: "Innovation & Solution Manager", group: "exp" },
-        { id: "Leadership", group: "skill" },
-        { id: "Fullstack", group: "skill" },
-        { id: "CBTW", group: "exp" },
-      ],
-      links: [
-        { source: "Maxime Faye", target: "Innovation & Solution Manager" },
-        { source: "Innovation & Solution Manager", target: "CBTW" },
-        { source: "Maxime Faye", target: "Cytiva" },
-        { source: "Cytiva", target: "C#" },
-        { source: "Cytiva", target: ".NET" },
-        { source: "Cytiva", target: "Entity Framework" },
-        { source: "Cytiva", target: "Azure DevOps" },
-        { source: "Maxime Faye", target: "Leadership" },
-        { source: "Maxime Faye", target: "Fullstack" }
-      ]
-    };
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="hero-content">
+                <h1 class="name" id="name">Maxime Faye</h1>
+                <p class="title" id="title">Tech Lead / Engineering Manager</p>
+                <div class="hero-meta">
+                    <span class="meta-item" id="nationality"></span>
+                    <span class="meta-item" id="languages"></span>
+                </div>
+            </div>
+            <div class="hero-contact">
+                <a href="#" class="contact-link contact-email">📧 Email</a>
+                <a href="#" class="contact-link contact-phone">📱 Téléphone</a>
+                <a href="#" class="contact-link contact-linkedin" target="_blank" rel="noopener">🔗 LinkedIn</a>
+                <a href="#" class="contact-link contact-github" target="_blank" rel="noopener">💻 GitHub</a>
+            </div>
+            <nav class="nav">
+                <a href="#about" class="nav-link">Profil</a>
+                <a href="#leadership" class="nav-link">Leadership</a>
+                <a href="#experience" class="nav-link">Expérience</a>
+                <a href="#projects" class="nav-link">Projets</a>
+                <a href="#skills" class="nav-link">Compétences</a>
+                <a href="#education" class="nav-link">Formation</a>
+            </nav>
+        </header>
 
-    const svg = d3.select("svg"),
-      width = window.innerWidth,
-      height = window.innerHeight;
+        <!-- About Section -->
+        <section id="about" class="section about">
+            <h2 class="section-title">Profil</h2>
+            <div class="about-content">
+                <p class="about-text">
+                    Tech Lead et Architecte Logiciel avec <strong>20 ans d'expérience</strong> dans le développement de solutions logicielles complexes.
+                    Spécialisé dans le <strong>leadership technique</strong>, l'architecture de systèmes et la <strong>gestion d'équipes</strong> de développement.
+                </p>
+                <div class="highlights">
+                    <div class="highlight-card">
+                        <div class="highlight-number">20+</div>
+                        <div class="highlight-label">Années d'expérience</div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-number">20+</div>
+                        <div class="highlight-label">Développeurs recrutés et coachés</div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-number">15+</div>
+                        <div class="highlight-label">Projets architecturés</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    const simulation = d3.forceSimulation(graph.nodes)
-      .force("link", d3.forceLink(graph.links).id(d => d.id).distance(120))
-      .force("charge", d3.forceManyBody().strength(-500))
-      .force("center", d3.forceCenter(width / 2, height / 2));
+        <!-- Leadership & Management Section -->
+        <section class="section leadership">
+            <h2 class="section-title">Leadership & Management</h2>
+            <div class="leadership-grid">
+                <div class="leadership-card">
+                    <h3>Gestion d'équipe</h3>
+                    <ul>
+                        <li>Coordination et animation d'équipes jusqu'à 25 développeurs</li>
+                        <li>Recrutement et montée en compétence</li>
+                        <li>Workshop leading et coaching</li>
+                    </ul>
+                </div>
+                <div class="leadership-card">
+                    <h3>Méthodologies</h3>
+                    <ul>
+                        <li>Mise en place et optimisation SCRUM</li>
+                        <li>CI/CD avec Azure DevOps, Jenkins</li>
+                        <li>Stratégies de qualité avec SonarQube</li>
+                    </ul>
+                </div>
+                <div class="leadership-card">
+                    <h3>Architecture</h3>
+                    <ul>
+                        <li>Conception d'architectures frontend modulaires</li>
+                        <li>Solutions cloud (GCP, Railway)</li>
+                        <li>Systèmes pour appareils médicaux</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-    const link = svg.append("g")
-      .selectAll("line")
-      .data(graph.links)
-      .join("line")
-      .attr("class", "link")
-      .attr("stroke-width", 1.5);
+        <!-- Experience Section -->
+        <section id="experience" class="section experience">
+            <h2 class="section-title">Expériences Clés</h2>
+            <div id="experiences-container" class="timeline">
+                <!-- Experiences will be loaded dynamically -->
+            </div>
+        </section>
 
-    const node = svg.append("g")
-      .attr("stroke-width", 1.5)
-      .selectAll("g")
-      .data(graph.nodes)
-      .join("g")
-      .attr("class", "node")
-      .call(drag(simulation));
+        <!-- Projects & Initiatives Section -->
+        <section id="projects" class="section projects">
+            <h2 class="section-title">Projets & Initiatives</h2>
+            <div class="projects-intro">
+                <p>Projets internes réalisés dans le cadre de mes responsabilités de Tech Manager chez CBTW, démontrant mon engagement dans l'innovation, l'optimisation des processus et le développement de solutions adaptées aux besoins de l'entreprise.</p>
+            </div>
+            <div id="projects-container" class="projects-grid">
+                <!-- Projects will be loaded dynamically -->
+            </div>
+        </section>
 
-    node.append("circle")
-      .attr("r", 20)
-      .on("click", (event, d) => highlightConnections(d.id));
+        <!-- Skills Section -->
+        <section id="skills" class="section skills">
+            <h2 class="section-title">Stack Technique</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <div class="skill-tags" id="frontend-skills"></div>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <div class="skill-tags" id="backend-skills"></div>
+                </div>
+                <div class="skill-category">
+                    <h3>DevOps & Tools</h3>
+                    <div class="skill-tags" id="devops-skills"></div>
+                </div>
+                <div class="skill-category">
+                    <h3>Databases</h3>
+                    <div class="skill-tags" id="database-skills"></div>
+                </div>
+            </div>
+        </section>
 
-    node.append("text")
-      .text(d => d.id)
-      .attr("x", 25)
-      .attr("y", 5);
+        <!-- Early Career Section -->
+        <section id="early-career" class="section early-career">
+            <h2 class="section-title">Expériences Antérieures</h2>
+            <p class="early-career-intro">Début de carrière (2005-2015) - Développement logiciel dans divers secteurs</p>
+            <div id="early-career-container" class="early-timeline"></div>
+        </section>
 
-    simulation.on("tick", () => {
-      link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
+        <!-- Education Section -->
+        <section id="education" class="section education">
+            <h2 class="section-title">Formation & Certifications</h2>
+            <div id="education-container" class="education-grid">
+                <!-- Education will be loaded dynamically -->
+            </div>
+        </section>
 
-      node
-        .attr("transform", d => `translate(${d.x},${d.y})`);
-    });
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="footer-name">Maxime Faye - Tech Lead / Engineering Manager</p>
+                <div class="footer-contact">
+                    <a href="#" class="footer-link contact-email">📧 Email</a>
+                    <span class="footer-separator">•</span>
+                    <a href="#" class="footer-link contact-phone">📱 Téléphone</a>
+                    <span class="footer-separator">•</span>
+                    <a href="#" class="footer-link contact-linkedin" target="_blank" rel="noopener">LinkedIn</a>
+                    <span class="footer-separator">•</span>
+                    <a href="#" class="footer-link contact-github" target="_blank" rel="noopener">GitHub</a>
+                </div>
+                <p class="footer-note">CV généré dynamiquement - <span id="current-year"></span></p>
+            </div>
+        </footer>
+    </div>
 
-    function drag(simulation) {
-      return d3.drag()
-        .on("start", event => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          event.subject.fx = event.subject.x;
-          event.subject.fy = event.subject.y;
-        })
-        .on("drag", event => {
-          event.subject.fx = event.x;
-          event.subject.fy = event.y;
-        })
-        .on("end", event => {
-          if (!event.active) simulation.alphaTarget(0);
-          event.subject.fx = null;
-          event.subject.fy = null;
-        });
-    }
-
-    function highlightConnections(id) {
-      link.classed("highlighted", d => d.source.id === id || d.target.id === id);
-    }
-
-    // Toggle theme button
-    const button = document.getElementById('theme-toggle');
-    button.addEventListener('click', () => {
-      const isLight = document.body.getAttribute('data-theme') === 'light';
-      document.body.setAttribute('data-theme', isLight ? 'dark' : 'light');
-      button.textContent = isLight ? 'Light Mode' : 'Dark Mode';
-    });
-  </script>
+    <!-- Load resume data first, then the app -->
+    <script src="resume-data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
