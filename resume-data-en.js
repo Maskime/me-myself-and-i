@@ -704,8 +704,8 @@ const resumeDataEn = {
       "company": "CBTW",
       "period": {
         "start": "2024-04",
-        "end": null,
-        "ongoing": true
+        "end": "2024-09",
+        "ongoing": false
       },
       "description": "Market technology trend analysis system through LinkedIn job posting exploitation, using CustomGPT to extract and synthesize data.",
       "context": "Determine whether the Software Engineering department teams are aligned with market demands.",
@@ -757,8 +757,8 @@ const resumeDataEn = {
       "company": "CBTW",
       "period": {
         "start": "2024-06",
-        "end": null,
-        "ongoing": true
+        "end": "2024-08",
+        "ongoing": false
       },
       "description": "Tool enabling voice capture of a user describing their professional experiences. Audio is automatically transcribed, then analyzed to structure key information (role, missions, results, skills, context) for efficient reuse in a CV or professional portfolio.",
       "context": "Optimize the valorization of professional journeys by simplifying the formalization of experiences.",
